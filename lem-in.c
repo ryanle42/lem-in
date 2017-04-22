@@ -4,66 +4,104 @@
 **	INIT
 */
 
-int get_start(char **doc)
+int **init_map(t_data data)
 {
-	int i;
-	int room;
+	int **map;
+	int x;
+	int y;
 
-	room = 0;
-	i = 0;
-	while (doc[i])
+	map = (int **)malloc(sizeof(int*) * data.max_rooms);
+	y = 0;
+	while (y < data.max_rooms)
 	{
-		if (!ft_strcmp("##start", doc[i]))
-			return (room);
-		if (valid_room(doc[i]))
-			room++;
-		i++;
+		map[y] = (int *)malloc(sizeof(int) * data.max_rooms);
+		x = 0;
+		while (x < data.max_rooms)
+		{
+			map[y][x] = 0;
+			x++;
+		}
+		y++;
 	}
-	return (-1);
+	return (map);
 }
 
-int get_end(char **doc)
+int link_num(char *link, int n)
 {
+	int num;
 	int i;
-	int room;
 
-	room = 0;
 	i = 0;
-	while (doc[i])
+	num = 0;
+	while (link[i] && ft_isdigit(link[i]))
 	{
-		if (!ft_strcmp("##end", doc[i]))
-			return (room);
-		if (valid_room(doc[i]))
-			room++;
+		num *= 10;
+		num += link[i] - '0';
 		i++;
 	}
-	return (-1);
+	if (n == 0)
+		return (num);
+	num = 0;
+	i++;
+	while (link[i] && ft_isdigit(link[i]))
+	{
+		num *= 10;
+		num += link[i] - '0';
+		i++;
+	}
+	return (num);
+}
+int **make_map(t_data data)
+{
+	int **map;
+	int i;
+
+	map = init_map(data);
+	i = 0;
+	while (data.links[i])
+	{
+		map[link_num(data.links[i], 0)][link_num(data.links[i], 1)] = 1;
+		map[link_num(data.links[i], 1)][link_num(data.links[i], 0)] = 1;
+		i++;
+	}
+	return (map);
 }
 
 int main()
 {
-	char **doc;
-	int start;
-	int end;
+	t_data data;
+	int	**map;
 
-	doc = get_doc();
+	data = get_data();
+	map = make_map(data);
 
-	char **rooms;
-
-
-	rooms = get_rooms(doc);
-
-	if ((start = get_start(doc)) < 0)
-		printf("error\n");
-	if ((end = get_end(doc)) < 0)
-		printf("error\n");
 	int i = 0;
-	while (rooms[i])
+	while (data.rooms[i])
 	{
-		printf("room:%s\n", rooms[i]);
+		printf("room:%s\n", data.rooms[i]);
 		i++;
 	}
-	printf("start: %i\n", start);
-	printf("end: %i\n", end);
-
+	i = 0;
+	while (data.links[i])
+	{
+		printf("link:%s\n", data.links[i]);
+		i++;
+	}
+	printf("rooms:%i\n", data.max_rooms);
+	printf("start: %i\n", data.start);
+	printf("end: %i\n", data.end);
+	printf("\n");
+	i = 0;
+	int j;
+	while (i < data.max_rooms)
+	{
+		j = 0;
+		while (j < data.max_rooms)
+		{
+			printf("%i ", map[i][j]);
+			j++;
+		}
+		printf("\n");
+		i++;
+	}
 }

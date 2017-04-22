@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:38:30 by rle               #+#    #+#             */
-/*   Updated: 2017/04/21 14:22:29 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/21 19:46:18 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,12 @@
 
 typedef struct		s_data
 {
-	int				ants;
 	int				start; 
 	int				end;
-	int				rooms;
+	int				max_rooms;
+	char			**rooms;
+	char			**doc;
+	char			**links;
 }					t_data;
 
 typedef struct		s_link
@@ -45,7 +47,13 @@ char	**get_doc();
 // get_rooms
 char 	**get_rooms(char **doc);
 int 	get_max_rooms(char **doc);
-int	valid_room(char *line);
+int		valid_room(char *line);
 char	*get_name(char *line);
+
+// get data
+t_data	get_data();
+
+//get links
+char **get_links(char **doc);
 
 # endif
