@@ -135,7 +135,6 @@ t_room *link_rooms(t_room *rooms, t_data data)
 	{
 		j = get_id(data, link_num(data.links[i], 0));
 		k = get_id(data, link_num(data.links[i], 1));
-		printf("rm: %i link :%i\n ", j, k);
 		current = rooms[j].links;
 		if (!current->room)
 			current->room = &rooms[k];
@@ -163,18 +162,23 @@ t_room *link_rooms(t_room *rooms, t_data data)
 	return (rooms);
 }
 
-void	recursion(t_links *link, int i)
+void	recursion(t_links *link, int i, char *prev)
 {
-	if (!link || !link->room)
+	if (!link->room)
 		return ;
-	if (link->room->dist != -1)
-		return ;
-	link->room->dist = i;
-	recursion(link->room->links, i + 1);
+	if (link->room->dist == -1)
+	{
+		link->room->dist = i;
+		recursion(link->room->links, i + 1, link->room->name);
+	}
 	while (link->next)
 	{
+		printf("\nroom:%s i: %i\n", link->room->name, i);
 		link = link->next;
-		recursion(link, i + 1);
+		if (link->room->dist == -1)
+			link->room->dist = i;
+		if (!ft_strcmp(link->room->name, prev))
+			recursion(link->room->links, i + 1, link->room->name);
 	}
 }
 
@@ -220,6 +224,15 @@ int main()
 	}
 
 	i = 0;
+	rooms[data.end].dist = 0;
+	recursion(rooms[data.end].links, 1, rooms[data.end].name);
+	i = 0;
+	while (i < data.max_rooms)
+	{
+		printf("\nroom: %s dist: %i", rooms[i].name, rooms[i].dist);
+		i++;
+	}
+	i = 0;
 	printf("\nid | name | links");
 	while (i < data.max_rooms)
 	{
@@ -234,12 +247,4 @@ int main()
 		i++;
 	}
 
-	rooms[data.end].dist = 0;
-	recursion(rooms[data.end].links, 1);
-	i = 0;
-	while (i < data.max_rooms)
-	{
-		printf("\nroom: %s dist: %i", rooms[i].name, rooms[i].dist);
-		i++;
-	}
 }
