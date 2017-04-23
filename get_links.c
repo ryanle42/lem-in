@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/21 19:25:56 by rle               #+#    #+#             */
-/*   Updated: 2017/04/21 19:36:00 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/22 18:23:56 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,20 +17,14 @@ int		valid_link(char *line)
 	int i;
 
 	i = 0;
-	if (!ft_isdigit(line[i]))
+	if (!line[i] || line[i] == 'L' || line[i] == '#')
 		return (0);
-	while (line[i] && ft_isdigit(line[i]))
+	while (line[i] && line[i] != '-')
 		i++;
 	if (!line[i])
 		return (0);
-	if (line[i] != '-')
-		return (0);
 	i++;
-	if (!ft_isdigit(line[i]))
-		return (0);
-	while (line[i] && ft_isdigit(line[i]))
-		i++;
-	if (line[i])
+	if (!line[i] || line[i] == 'L' || line[i] == '#')
 		return (0);
 	return (1);
 }

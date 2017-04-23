@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:38:30 by rle               #+#    #+#             */
-/*   Updated: 2017/04/21 19:46:18 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/22 17:12:00 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,17 +27,34 @@ typedef struct		s_data
 	char			**links;
 }					t_data;
 
+/*
+** property
+** 1 = start
+** 0 = end
+** 2 = normal
+*/
+
+typedef struct		s_room
+{
+	char			*name;
+	int				property;
+	int				ants;
+	int				dist;
+	struct s_links	*links;
+}					t_room;
+
+typedef struct		s_links
+{
+	struct s_room	*room;
+	struct s_links	*next;
+}					t_links;
+
+
 typedef struct		s_link
 {
-	char 			*line;
+	char			*line;
 	struct s_link	*next;
 }					t_link;
-
-typedef struct 		s_doc
-{
-	char			**file;
-	int				size;
-}					t_doc;
 
 // init
 int		get_first_num();
