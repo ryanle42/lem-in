@@ -91,7 +91,7 @@ int **make_map(t_data data)
 		y = get_id(data, link_num(data.links[i], 0));
 		x = get_id(data, link_num(data.links[i], 1));
 		map[y][x] = 1;
-		map[y][x] = 1;
+		map[x][y] = 1;
 		i++;
 	}
 	return (map);
@@ -182,6 +182,30 @@ void	recursion(t_links *link, int i, char *prev)
 	}
 }
 
+int get_path(t_path *paths, int *used, t_data data, int **map)
+{
+	int j;
+
+	j = 0;
+	printf("i:%i\n", *(paths->path));
+	if (*(paths->path) == data.end)
+		return (1);
+	while (j < data.max_rooms)
+	{
+		if (map[*(paths->path)][j] == 1 && !used[j])
+		{
+			used[j] = 1;
+			paths->path++;
+			paths->size++;
+			*(paths->path) = j;
+			if (get_path(paths, used, data, map))
+				return (1);
+		}
+		j++;
+	}
+	return (0);
+}
+
 int main()
 {
 	t_data data;
@@ -223,9 +247,22 @@ int main()
 		i++;
 	}
 
+	t_path paths;
+	int a[data.max_rooms];
+	paths.path = a;
+	int used[data.max_rooms];
+	ft_bzero(paths.path,sizeof(paths.path));
+	ft_bzero(used, sizeof(used));
+	used[data.start] = 1;
+	paths.size = 0;
+	get_path(&paths, used, data, map);
 	i = 0;
-	rooms[data.end].dist = 0;
-	recursion(rooms[data.end].links, 1, rooms[data.end].name);
+	while (i < paths.size)
+	{
+		printf("path: %s\n", data.rooms[paths.path[i]]);
+		i++;
+	}
+
 	i = 0;
 	while (i < data.max_rooms)
 	{

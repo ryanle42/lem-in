@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:38:30 by rle               #+#    #+#             */
-/*   Updated: 2017/04/22 17:12:00 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/24 21:09:06 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ typedef struct		s_links
 	struct s_links	*next;
 }					t_links;
 
+typedef struct 		s_path
+{
+	int				*path;
+	int				size;
+}					t_path;
 
 typedef struct		s_link
 {
