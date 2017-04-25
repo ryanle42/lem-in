@@ -182,24 +182,24 @@ void	recursion(t_links *link, int i, char *prev)
 	}
 }
 
-int get_path(t_path *paths, int *used, t_data data, int **map)
+int get_path(int *paths, int *used, t_data data, int *pathsize, int i)
 {
 	int j;
 
 	j = 0;
-	printf("i:%i\n", *(paths->path));
-	if (*(paths->path) == data.end)
+	if (i == data.end)
 		return (1);
 	while (j < data.max_rooms)
 	{
-		if (map[*(paths->path)][j] == 1 && !used[j])
+		if (data.map[i][j] == 1 && !used[j])
 		{
 			used[j] = 1;
-			paths->path++;
-			paths->size++;
-			*(paths->path) = j;
-			if (get_path(paths, used, data, map))
+			if (get_path((paths + 1), used, data, pathsize, j))
+			{
+				*paths = j;
+				(*pathsize)++;
 				return (1);
+			}
 		}
 		j++;
 	}
@@ -210,12 +210,16 @@ int main()
 {
 	t_data data;
 	t_room *rooms;
-	int	**map;
 
 	data = get_data();
 	rooms = make_rooms(data);
 	rooms = link_rooms(rooms, data);
-	map = make_map(data);
+	data.map = make_map(data);
+
+
+	/*
+	**	Print Data
+	*/
 
 	int i = 0;
 	while (data.rooms[i])
@@ -230,38 +234,57 @@ int main()
 		i++;
 	}
 	printf("rooms:%i\n", data.max_rooms);
-	printf("start: %i\n", data.start);
-	printf("end: %i\n", data.end);
+	printf("start: %s\n", data.rooms[data.start]);
+	printf("end: %s\n", data.rooms[data.end]);
 	printf("\n");
 	i = 0;
 	int j;
+	printf("   ");
+	while (i < data.max_rooms)
+	{
+		printf("%s ", data.rooms[i]);
+		i++;
+	}
+	printf("\n");
+	i = 0;
 	while (i < data.max_rooms)
 	{
 		j = 0;
+		printf("%s  ", data.rooms[i]);
 		while (j < data.max_rooms)
 		{
-			printf("%i ", map[i][j]);
+			printf("%i ", data.map[i][j]);
 			j++;
 		}
 		printf("\n");
 		i++;
 	}
 
-	t_path paths;
-	int a[data.max_rooms];
-	paths.path = a;
+	/*
+	**	GET PATH
+	*/
+
+	printf("\n");
+
+	int *paths;
 	int used[data.max_rooms];
-	ft_bzero(paths.path,sizeof(paths.path));
+	paths = (int *)malloc(sizeof(int) * data.max_rooms);
+	ft_bzero(paths,sizeof(paths));
 	ft_bzero(used, sizeof(used));
 	used[data.start] = 1;
-	paths.size = 0;
-	get_path(&paths, used, data, map);
+	int pathsize = 1;
+	*paths = data.start; 
+	get_path(paths + 1, used, data, &pathsize, data.start);
 	i = 0;
-	while (i < paths.size)
+	while (i < pathsize)
 	{
-		printf("path: %s\n", data.rooms[paths.path[i]]);
+		printf("path: %s\n", data.rooms[paths[i]]);
 		i++;
 	}
+
+
+
+
 
 	i = 0;
 	while (i < data.max_rooms)
