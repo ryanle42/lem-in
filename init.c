@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 15:26:54 by rle               #+#    #+#             */
-/*   Updated: 2017/04/21 19:03:02 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/25 21:07:53 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ char **get_doc()
 		file = (t_link*)malloc(sizeof(t_link));
 		file->line = line;
 		file->next = NULL;
+		//free(line);
 	}
 	current = file;
 	while (get_next_line(0, &line))
@@ -75,6 +76,8 @@ char **get_doc()
 		current = current->next;
 		current->line = line;
 		current->next = NULL;
+		//free(line);
 	}
+	//free(line);
 	return (store_doc(file));
 }

@@ -6,13 +6,14 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 16:29:53 by rle               #+#    #+#              #
-#    Updated: 2017/04/21 19:35:16 by rle              ###   ########.fr        #
+#    Updated: 2017/04/25 20:02:34 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = lem-in
 
-OBJS = $(addsuffix .o, lem-in init get_rooms get_data get_links)
+OBJS = $(addsuffix .o, lem-in init get_rooms get_data get_links get_map \
+		get_path)
 
 CC = gcc
 

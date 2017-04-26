@@ -4,99 +4,6 @@
 **	INIT
 */
 
-
-int		get_id(t_data data, char *name)
-{
-	int i;
-
-	i = 0;
-	while (data.rooms[i])
-	{
-		if (!ft_strcmp(data.rooms[i], name))
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-int **init_map(t_data data)
-{
-	int **map;
-	int x;
-	int y;
-
-	map = (int **)malloc(sizeof(int*) * data.max_rooms);
-	y = 0;
-	while (y < data.max_rooms)
-	{
-		map[y] = (int *)malloc(sizeof(int) * data.max_rooms);
-		x = 0;
-		while (x < data.max_rooms)
-		{
-			map[y][x] = 0;
-			x++;
-		}
-		y++;
-	}
-	return (map);
-}
-
-char *link_num(char *link, int n)
-{
-	int i;
-	int j;
-	char *c;
-
-	i = 0;
-	while (link[i] != '-')
-		i++;
-	c = (char *)malloc(sizeof(char) * i + 1);
-	i = 0;
-	while (link[i] != '-')
-	{
-		c[i] = link[i];
-		i++;
-	}
-	c[i] = '\0';
-	if (n == 0)
-		return (c);
-	free(c);
-	i++;
-	j = 0;
-	while (link[i + j])
-		j++;
-	c = (char *)malloc(sizeof(char) * j + 1);
-	j = 0;
-	while (link[i])
-	{
-		c[j] = link[i];
-		j++;
-		i++;
-	}
-	c[j] = '\0';
-	return (c);
-}
-
-int **make_map(t_data data)
-{
-	int **map;
-	int i;
-	int y;
-	int x;
-
-	map = init_map(data);
-	i = 0;
-	while (data.links[i])
-	{
-		y = get_id(data, link_num(data.links[i], 0));
-		x = get_id(data, link_num(data.links[i], 1));
-		map[y][x] = 1;
-		map[x][y] = 1;
-		i++;
-	}
-	return (map);
-}
-
 t_room *make_rooms(t_data data)
 {
 	t_room *rooms;
@@ -114,7 +21,6 @@ t_room *make_rooms(t_data data)
 		else
 			rooms[i].property = 2;
 		rooms[i].ants = 0;
-		rooms[i].dist = -1;
 		rooms[i].links = (t_links *)malloc(sizeof(t_links));
 		rooms[i].links->room = NULL;
 		rooms[i].links->next = NULL;
@@ -133,8 +39,8 @@ t_room *link_rooms(t_room *rooms, t_data data)
 	i = 0;
 	while (data.links[i])
 	{
-		j = get_id(data, link_num(data.links[i], 0));
-		k = get_id(data, link_num(data.links[i], 1));
+		j = get_id(data, get_link_num(data.links[i], 0));
+		k = get_id(data, get_link_num(data.links[i], 1));
 		current = rooms[j].links;
 		if (!current->room)
 			current->room = &rooms[k];
@@ -162,65 +68,57 @@ t_room *link_rooms(t_room *rooms, t_data data)
 	return (rooms);
 }
 
-void	recursion(t_links *link, int i, char *prev)
+void init_ants(t_links *head, int ants)
 {
-	if (!link->room)
+	if (!head)
 		return ;
-	if (link->room->dist == -1)
+	head->space = 0;
+	head->id = 0;
+	head->room->property = 0;
+	while (head->next)
 	{
-		link->room->dist = i;
-		recursion(link->room->links, i + 1, link->room->name);
+		head = head->next;
+		head->room->property = 2;
+		head->id = 0;
+		head->space = 0;
 	}
-	while (link->next)
-	{
-		printf("\nroom:%s i: %i\n", link->room->name, i);
-		link = link->next;
-		if (link->room->dist == -1)
-			link->room->dist = i;
-		if (!ft_strcmp(link->room->name, prev))
-			recursion(link->room->links, i + 1, link->room->name);
-	}
+	head->room->property = 1;
+	head->space = ants;
 }
-
-int get_path(int *paths, int *used, t_data data, int *pathsize, int i)
+void	print_ans(t_links *head, t_links *current, t_data data, int ant)
 {
-	int j;
-
-	j = 0;
-	if (i == data.end)
-		return (1);
-	while (j < data.max_rooms)
+	while (head->id != data.ants)
 	{
-		if (data.map[i][j] == 1 && !used[j])
+		current = head;
+		while (current->next)
 		{
-			used[j] = 1;
-			if (get_path((paths + 1), used, data, pathsize, j))
+			if (current->space == 0 || current->room->property == 0)
 			{
-				*paths = j;
-				(*pathsize)++;
-				return (1);
+				if (current->next->room->property == 1 && \
+					current->next->space > 0)
+				{
+					printf("L%i-%s ", ant, current->room->name);
+					current->next->space--;
+					current->id = ant;
+					current->space++;
+					ant++;
+				}
+				else if (current->next->room->property != 1 && \
+					current->next->space != 0)
+				{
+					printf("L%i-%s ", current->next->id, current->room->name);
+					current->id = current->next->id;
+					current->space++;
+					current->next->space = 0;
+				}
 			}
+			current = current->next;
 		}
-		j++;
+		printf("\n");
 	}
-	return (0);
 }
-
-int main()
+void	print_data(t_data data, t_room *rooms, t_links *current)
 {
-	t_data data;
-	t_room *rooms;
-
-	data = get_data();
-	rooms = make_rooms(data);
-	rooms = link_rooms(rooms, data);
-	data.map = make_map(data);
-
-
-	/*
-	**	Print Data
-	*/
-
 	int i = 0;
 	while (data.rooms[i])
 	{
@@ -259,39 +157,6 @@ int main()
 		printf("\n");
 		i++;
 	}
-
-	/*
-	**	GET PATH
-	*/
-
-	printf("\n");
-
-	int *paths;
-	int used[data.max_rooms];
-	paths = (int *)malloc(sizeof(int) * data.max_rooms);
-	ft_bzero(paths,sizeof(paths));
-	ft_bzero(used, sizeof(used));
-	used[data.start] = 1;
-	int pathsize = 1;
-	*paths = data.start; 
-	get_path(paths + 1, used, data, &pathsize, data.start);
-	i = 0;
-	while (i < pathsize)
-	{
-		printf("path: %s\n", data.rooms[paths[i]]);
-		i++;
-	}
-
-
-
-
-
-	i = 0;
-	while (i < data.max_rooms)
-	{
-		printf("\nroom: %s dist: %i", rooms[i].name, rooms[i].dist);
-		i++;
-	}
 	i = 0;
 	printf("\nid | name | links");
 	while (i < data.max_rooms)
@@ -306,5 +171,34 @@ int main()
 		}
 		i++;
 	}
+	printf("\n\npath:%s\n", current->room->name);
+	while (current->next)
+	{
+		current = current->next;
+		printf("path:%s\n", current->room->name);
+	}
+	printf("\n");
+}
+
+int main()
+{
+	t_data data;
+	t_room *rooms;
+	t_links *head;
+
+	data = get_data();
+	rooms = make_rooms(data);
+	rooms = link_rooms(rooms, data);
+	data.map = make_map(data);
+
+	/*
+	**	Print Data
+	*/
+	head = get_path(data, rooms);
+	init_ants(head, data.ants);
+
+	print_data(data, rooms, head);
+
+	print_ans(head, head, data, 1);
 
 }
