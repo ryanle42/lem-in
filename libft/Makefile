@@ -6,7 +6,7 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2016/11/28 09:03:31 by rle               #+#    #+#              #
-#    Updated: 2017/04/12 16:09:04 by rle              ###   ########.fr        #
+#    Updated: 2017/05/07 21:34:24 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -80,20 +80,21 @@ OBJ = ft_memset.o \
 	  ft_realloc.o \
 	  get_next_line.o
 
-CC = gcc -Wall -Werror -Wextra -I ./includes
+CC = @gcc -Wall -Werror -Wextra -I ./includes
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	ar rc $(NAME) $(OBJ) 
+	@ar rc $(NAME) $(OBJ)
+	@echo "\x1B[33mLibrary made"
 
 clean:
-	rm -f $(OBJ)
+	@rm -f $(OBJ)
 
 fclean: clean
-	rm -f $(NAME)
+	@rm -f $(NAME)
 
 re: fclean all
 
 bin: re
-	make clean
+	@make clean

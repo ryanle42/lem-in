@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/12/22 13:30:02 by rle               #+#    #+#             */
-/*   Updated: 2017/04/25 21:12:49 by rle              ###   ########.fr       */
+/*   Updated: 2017/04/26 21:56:04 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,29 +32,28 @@ t_file		*find_make_node(t_file *head, const int fd)
 	return (current->next);
 }
 
-int			check_extra(t_file *current, char **total, int *first)
+int			check_extra(t_file *current, char **total, int *first, int i)
 {
-	int i;
+	char *tmp;
 
-	i = 0;
-	if (!((current->extra)[i]))
+	if (!((current->extra)[0]))
 	{
-		(*total)[i] = '\0';
+		(*total)[0] = '\0';
 		if (current->ret == 0)
 			return (1);
 		return (0);
 	}
-	while ((current->extra)[i])
+	while ((current->extra)[++i])
 	{
 		if ((current->extra)[i] == '\n')
 		{
-			(*total)[i] = '\0';
-			i++;
-			current->extra = ft_copystr(current->extra + i);
+			(*total)[i++] = '\0';
+			tmp = current->extra;
+			current->extra = ft_copystr(tmp + i);
+			free(tmp);
 			return (1);
 		}
 		(*total)[i] = (current->extra)[i];
-		i++;
 	}
 	(*total)[i] = '\0';
 	*first = 2;
@@ -68,7 +67,7 @@ char		*buff_it(const int fd, t_file *current, int *first, int nl)
 	int		i;
 
 	total = ft_strnew(ft_strlen(current->extra));
-	if (!(check_extra(current, &total, &(*first))))
+	if (!(check_extra(current, &total, &(*first), -1)))
 	{
 		while (!nl && current->ret != 0)
 		{
