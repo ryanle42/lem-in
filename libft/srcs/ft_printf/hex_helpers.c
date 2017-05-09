@@ -1,44 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_links.c                                        :+:      :+:    :+:   */
+/*   hex_helpers.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/21 19:25:56 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 23:15:34 by rle              ###   ########.fr       */
+/*   Created: 2017/04/05 12:33:30 by rle               #+#    #+#             */
+/*   Updated: 2017/05/07 22:23:20 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lemin.h>
+#include <libft.h>
 
-void	get_max_links(t_data *data)
+int		hex_length(uintmax_t n)
 {
 	int	i;
 
-	data->max_links = 0;
 	i = 0;
-	while (i < data->doc_size)
+	if (n == 0)
+		return (1);
+	while (n > 0)
 	{
-		if (valid_link(data->doc[i]))
-			data->max_links++;
+		n /= 16;
 		i++;
 	}
+	return (i);
 }
 
-void	get_links(t_data *data)
+void	hash_except(t_param *params, int letters)
 {
-	int	i;
-	int	j;
-
-	get_max_links(data);
-	data->links = (char **)malloc(sizeof(char *) * data->max_links);
-	i = 0;
-	j = 0;
-	while (i < data->doc_size)
-	{
-		if (valid_link(data->doc[i]))
-			data->links[j++] = ft_copystr(data->doc[i]);
-		i++;
-	}
+	if (letters == 0)
+		ft_putstr("0x");
+	else
+		ft_putstr("0X");
+	params->width -= 2;
+	params->counter += 2;
 }

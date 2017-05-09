@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/21 14:18:16 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 19:25:32 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/08 14:04:04 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ void	get_rooms(t_data *data)
 			if ((-1 == check_names(data->rooms, j)) || \
 				(-1 == check_coords(coord, j)))
 			{
-				printf("line: %i\n", i);
-				printf("ERROR: Duplicate name or coordinate\n");
+				ft_printf("line: %i\n", i);
+				ft_printf("ERROR: Duplicate name or coordinate\n");
 				exit(1);
 			}
 		}

@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/02 14:32:26 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 20:13:41 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/07 23:15:10 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int	valid_data(t_data data, int i, int info)
 		i++;
 	if (!valid_ants(data.doc[i]))
 	{
-		printf("ERROR: invalid ants\n");
+		ft_printf("ERROR: invalid ants\n");
 		exit(1);
 		return (0);
 	}
@@ -72,12 +72,12 @@ int	validate_doc(t_data data)
 {
 	if (!(valid_start_end(data, "##start") && valid_start_end(data, "##end")))
 	{
-		printf("ERROR: invalid start/end\n");
+		ft_printf("ERROR: invalid start/end\n");
 		exit(1);
 	}
 	if (!valid_data(data, 0, 0))
 	{
-		printf("ERROR: invalid map\n");
+		ft_printf("ERROR: invalid map\n");
 		exit(1);
 	}
 	return (1);

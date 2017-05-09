@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/07 18:34:42 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 20:33:59 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/07 23:15:19 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ t_room	*link_rooms(t_room *rooms, t_data data)
 		if ((-1 == (j = check_id(data, i, 0))) || \
 			(-1 == (k = check_id(data, i, 1))))
 		{
-			printf("ERROR: invalid link: %s\n", data.links[i]);
+			ft_printf("ERROR: invalid link: %s\n", data.links[i]);
 			exit(1);
 		}
 		link_rooms_help(current, rooms, j, k);

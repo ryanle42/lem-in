@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/19 14:38:30 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 20:48:15 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/08 14:38:32 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define LEMIN_H
 
 # include "libft.h"
-# include <stdio.h>
 
 typedef struct		s_data
 {
@@ -23,7 +22,7 @@ typedef struct		s_data
 	int				max_rooms;
 	int				doc_size;
 	int				max_links;
-	int				ants;
+	unsigned int	ants;
 	char			**rooms;
 	char			**doc;
 	char			**links;
@@ -42,22 +41,22 @@ typedef struct		s_room
 {
 	char			*name;
 	int				property;
-	int				ants;
+	unsigned int	ants;
 	struct s_links	*links;
 }					t_room;
 
 typedef struct		s_coord
 {
-	int				x;
-	int				y;
+	unsigned int	x;
+	unsigned int	y;
 }					t_coord;
 
 typedef struct		s_links
 {
 	struct s_room	*room;
 	struct s_links	*next;
-	int				space;
-	int				id;
+	unsigned int	space;
+	unsigned int	id;
 }					t_links;
 
 typedef struct		s_link
@@ -168,5 +167,6 @@ void				print_ans(t_links *head, t_links *current,
 */
 
 void				print_data(t_data data, t_room *rooms, t_links *current);
+void				print_doc(t_data data);
 
 #endif

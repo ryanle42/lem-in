@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/05/01 19:09:31 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 20:40:37 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/08 14:06:34 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	main(int argc, char **argv)
 	if (argc == 2)
 		if (argv[1][0] == '-' && argv[1][1] == 'v')
 			print_data(data, rooms, head);
+	print_doc(data);
 	print_ans(head, head, data, 1);
 	let_it_go(&data, rooms, head);
 }

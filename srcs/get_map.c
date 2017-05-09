@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/25 19:54:29 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 19:54:59 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/07 23:15:31 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	**make_map(t_data data)
 		if ((-1 == (y = check_id(data, i, 0))) || \
 			(-1 == (x = check_id(data, i, 1))))
 		{
-			printf("ERROR: invalid links\n");
+			ft_printf("ERROR: invalid links\n");
 			exit(1);
 		}
 		map[y][x] = 1;

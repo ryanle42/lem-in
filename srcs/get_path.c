@@ -75,7 +75,7 @@ t_links		*get_path(t_data data, t_room *rooms)
 	prep_path(&data, paths, used);
 	if (!find_path(paths + 1, used, &data, data.start))
 	{
-		printf("ERROR: No path to end\n");
+		ft_printf("ERROR: No path to end\n");
 		exit(1);
 	}
 	connect_path(data, rooms, head, paths);

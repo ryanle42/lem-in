@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/04/21 19:12:26 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 20:07:02 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/08 13:57:23 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ t_data	get_data(void)
 	get_doc(&data);
 	if (!validate_doc(data))
 	{
-		printf("ERROR: invalid doc\n");
+		ft_printf("ERROR: invalid doc\n");
 		exit(1);
 	}
 	get_max_rooms(&data);
@@ -76,7 +76,7 @@ t_data	get_data(void)
 	get_links(&data);
 	if (-1 == get_ants(&data))
 	{
-		printf("ERROR: invalid ants\n");
+		ft_printf("ERROR: invalid ants\n");
 		exit(1);
 	}
 	get_start(&data);

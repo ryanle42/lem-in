@@ -6,7 +6,7 @@
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/11/28 16:54:51 by rle               #+#    #+#             */
-/*   Updated: 2017/04/18 20:34:51 by rle              ###   ########.fr       */
+/*   Updated: 2017/05/07 23:12:07 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,13 @@
 
 # define BUFF_SIZE 10
 
-# include <string.h>
-# include <stdlib.h>
+# include <stdarg.h>
 # include <unistd.h>
-# include <sys/stat.h>
-# include <fcntl.h>
+# include <stdlib.h>
+
+/*
+**	LIBFT STRUCTS
+*/
 
 typedef struct		s_list
 {
@@ -35,6 +37,33 @@ typedef struct		s_file
 	char			*extra;
 	struct s_file	*next;
 }					t_file;
+
+/*
+**	FT_PRINTF STRUCTS
+*/
+
+typedef struct		s_flags
+{
+	int				plus;
+	int				minus;
+	int				zero;
+	int				hash;
+	int				space;
+}					t_flag;
+
+typedef struct		s_parameters{
+	t_flag			*flags;
+	int				size;
+	int				width;
+	int				precision;
+	int				is_precision;
+	int				counter;
+	int				zeros;
+}					t_param;
+
+/*
+**	LIBRARY
+*/
 
 int					get_next_line(const int fd, char **line);
 void				*ft_memset(void *b, int c, size_t len);
@@ -79,6 +108,7 @@ int					ft_strequ(char const *s1, char const *s2);
 int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strfreejoin(char *s1, char *s2);
 char				*ft_strtrim(char const *s);
 char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
@@ -103,5 +133,34 @@ int					ft_int_length(intmax_t n);
 char				*ft_strn_append(char *s1, char *s2, int n);
 char				*ft_copystr(char *str);
 char				*ft_realloc(char *str, int n);
+
+/*
+**	FT_PRINTF
+*/
+
+int					get_size(const char *fmt);
+void				remove_conflict_flags(t_param *params);
+int					get_flags(int fmt, t_flag *flags);
+void				reset_params(t_param *params);
+void				get_params(const char **fmt, t_param *params);
+intmax_t			convert_signed(t_param *params, intmax_t n);
+intmax_t			convert_unsigned(t_param *params, uintmax_t n);
+void				write_int(t_param *params, intmax_t n);
+void				int_flags(t_param *params);
+void				int_add_prefixes(char *str, int *i, t_param *params,
+										int flag);
+void				write_unsigned_int(t_param *params, uintmax_t n);
+void				unsigned_flags(t_param *params);
+int					unsigned_int_length(uintmax_t n);
+void				write_octal(t_param *params, uintmax_t n);
+int					oct_length(uintmax_t n);
+char				*make_octal(uintmax_t n, t_param *params);
+void				write_hex(t_param *params, uintmax_t n, int letters);
+void				write_ptr(t_param *params, long int n);
+void				hash_except(t_param *params, int letters);
+int					hex_length(uintmax_t n);
+void				write_char(t_param *params, unsigned char c);
+void				write_string(t_param *params, char *str);
+int					ft_printf(const char *fmt, ...);
 
 #endif

@@ -1,44 +1,51 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_links.c                                        :+:      :+:    :+:   */
+/*   octal_helpers.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: rle <rle@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/04/21 19:25:56 by rle               #+#    #+#             */
-/*   Updated: 2017/05/07 23:15:34 by rle              ###   ########.fr       */
+/*   Created: 2017/04/03 17:02:45 by rle               #+#    #+#             */
+/*   Updated: 2017/04/05 15:17:33 by rle              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <lemin.h>
+#include <libft.h>
 
-void	get_max_links(t_data *data)
+int		oct_length(uintmax_t n)
 {
-	int	i;
+	int i;
 
-	data->max_links = 0;
 	i = 0;
-	while (i < data->doc_size)
+	if (n == 0)
+		i++;
+	while (n > 0)
 	{
-		if (valid_link(data->doc[i]))
-			data->max_links++;
+		n /= 8;
 		i++;
 	}
+	return (i);
 }
 
-void	get_links(t_data *data)
+char	*make_octal(uintmax_t n, t_param *params)
 {
-	int	i;
-	int	j;
+	char		*base;
+	char		*str;
+	intmax_t	i;
 
-	get_max_links(data);
-	data->links = (char **)malloc(sizeof(char *) * data->max_links);
+	base = "01234567";
 	i = 0;
-	j = 0;
-	while (i < data->doc_size)
+	if (!(str = (char *)malloc(sizeof(char) * oct_length(n) + 1)))
+		return (NULL);
+	if (n == 0 && params->precision != 0)
 	{
-		if (valid_link(data->doc[i]))
-			data->links[j++] = ft_copystr(data->doc[i]);
-		i++;
+		str[i++] = '0';
+		return (str);
 	}
+	while (n > 0)
+	{
+		str[i++] = *(base + (n % 8));
+		n /= 8;
+	}
+	return (str);
 }

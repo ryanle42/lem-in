@@ -6,7 +6,7 @@
 #    By: rle <rle@student.42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/04/12 16:29:53 by rle               #+#    #+#              #
-#    Updated: 2017/05/07 21:35:34 by rle              ###   ########.fr        #
+#    Updated: 2017/05/08 15:01:46 by rle              ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -45,21 +45,22 @@ all: $(NAME)
 $(NAME): $(LIB) $(OBJS)
 	$(CC) $(CFLAGS) $(LIB)/libft.a $(OBJS) $(INCLUDES) -o $(NAME)
 	@echo "\x1B[31m./lemin made"
+
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c -o $@ $<
 
 $(LIB): force
-	@make -C libft
+	@make -C $(LIB)
 
 force: 
 	@true
 
 clean:
 	@rm -f $(OBJS)
+	@make clean -C $(LIB)
 	@echo "\x1B[34m~~~clean~~~"
 
 fclean: clean
-	@make fclean -C libft
 	@rm -f $(NAME)
 
 re: fclean all
